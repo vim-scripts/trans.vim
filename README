@@ -1,0 +1,51 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4365
+
+:Title: trans.vim
+:Author: Rykka
+:Version: 1.0
+:Github: https://github.com/Rykka/trans.vim
+:Update: 2013-01-10
+
+=========
+Trans.vim
+=========
+
+**Trans.vim** makes translation in vim easier::
+
+    使得翻译在vim容易。
+    vim内で翻訳が容易になります。
+    rend la traduction dans vim facile.
+    macht die Übersetzung in vim einfacher.
+    ...
+
+Usage
+-----
+
+``:Trans``
+    Translate word.
+
+    ``:Trans hello`` will echo ``你好`` and set register ``@"`` to 你好
+
+    ``<leader>tt`` will translate word under cursor or current visual selection.
+
+``:TransTo``
+    Translate word with input lang code.
+
+    ``<leader>to`` will translate to lang code with word under cursor or current visual selection.
+
+``:TransPo``
+    Translate po file
+
+    When in a po buffer, ``:TransPo`` will fill all empty msgstr with translated msgid.
+
+    if the msg is::
+
+        msgid "show all"
+        msgstr ""
+
+    it will be translate to::
+
+        msgid "show all"
+        msgstr "全部显示"
+
+
