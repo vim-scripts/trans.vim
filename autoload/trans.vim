@@ -14,7 +14,7 @@ set cpo-=C
 let s:path = expand('<sfile>:p:h').'/'
 let s:py_trans = s:path."trans/trans.py"
 function! s:py_core_load() "{{{
-    if exists("s:py_core_loaded")
+    if exists("s:py_core_loaded") || !g:trans_has_python
         return
     endif
     let s:py_core_loaded=1
@@ -26,31 +26,29 @@ fun! trans#default(option,value) "{{{
         return 0
     endif
     return 1
-endfun"}}}
+endfun "}}}
     
 fun! trans#init() "{{{
     call trans#default("g:trans_default_lang" , 'zh-CN'  )
     call trans#default("g:trans_engine" , 'google'  )
+    call trans#default("g:trans_google_url" , 'http://translate.google.com/translate_a/t')
     call trans#default("g:trans_bing_appid" , 'TpnIxwUGK4_mzmb0mI5konkjbIUY46bYxuLlU1RVGONE*'  )
     call trans#default("g:trans_bing_url" , 'https://api.microsofttranslator.com/v2/ajax.svc/Translate'  )
-    call trans#default("g:trans_google_url" , 'http://translate.google.com/translate_a/t')
     call trans#default("g:trans_header_agent" , 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.15 Safari/536.5')
     call trans#default("g:trans_set_reg" , 1)
     call trans#default("g:trans_echo" , 1)
 
     if has("python") "{{{
-        call trans#default("g:trans_has_python"     , 2                )
+        call trans#default("g:trans_has_python", 2)
         let s:py="py"
         call s:py_core_load()
     elseif has("python3")
-        call trans#default("g:trans_has_python"     , 3                )
+        call trans#default("g:trans_has_python", 3)
         let s:py="py3"
         call s:py_core_load()
     else
         let g:trans_has_python = 0
     endif "}}}
-    if g:trans_has_python
-    endif
 
 endfun "}}}
 
@@ -142,14 +140,15 @@ fun! s:get_visual() "{{{
     sil! norm! gvy
     let sel = @@
     let @@=tmp
+    let sel = substitute(sel,'[[:cntrl:]]',' ','g')
     return sel
 endfun "}}}
-function! trans#v() "{{{
+function! trans#v() range "{{{
     return trans#smart(s:get_visual())
 endfunction "}}}
 
 fun! trans#smart(word) "{{{
-    if a:word =~ '^[[:alnum:][:blank:][:punct:]]\+$'
+    if a:word =~ '^[[:alnum:][:blank:][:punct:][:cntrl:]]\+$'
         let from = 'en'
         let to = g:trans_default_lang
     else
@@ -164,7 +163,7 @@ fun! trans#smart(word) "{{{
 endfun "}}}
 
 " Translate po file {{{1
-" msgid "shown all"
+" msgid "show all"
 " msgstr "全部显示"
 let s:rex_id = 'msgid "\zs[^"[:space:]].*\ze"'
 let s:rex_str = 'msgstr ""'
@@ -198,8 +197,4 @@ fun! trans#trans_po() "{{{
         endif
     endfor
 endfun "}}}
-
-
-
-
 
