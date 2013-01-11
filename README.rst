@@ -8,12 +8,13 @@
 Trans.vim
 =========
 
-**Trans.vim** makes translation in vim easier::
+**Trans.vim** makes translation in vim easier.
+::
 
-    使得翻译在vim容易。
-    vim内で翻訳が容易になります。
-    rend la traduction dans vim facile.
-    macht die Übersetzung in vim einfacher.
+    Trans.vim使翻译在vim更容易。
+    Trans.vimはvimでの変換が容易になります。
+    Trans.vim rend la traduction dans vim facile.
+    Транс.вим чини превод на вим лакше.
     ...
 
 Installation
@@ -27,7 +28,7 @@ Install:
 
     - Vundle_:
 
-      In your Vimrc::
+      In your vimrc::
       
        Bundle 'Rykka/trans.vim'
        " for no python version
@@ -41,7 +42,7 @@ Usage
 ``:Trans``
     Translate word.
 
-    ``:Trans hello`` will echo ``你好`` and set register ``@"`` to 你好
+    e.g. ':Trans hello' will echo ``你好`` and set register ``@"`` to 你好
 
     ``<leader>tt`` will translate word under cursor or current visual selection.
 
@@ -115,8 +116,8 @@ APIs
 There are several built-in APIs, and you can define your own API
 to use other translators.
 
-Define your own API,
-if your API need only 'GET' method, then in your vimrc::
+Define your own API
+  if your API need only 'GET' method, then in your vimrc::
     
     " init default apis
     call trans#data#init()
@@ -125,14 +126,16 @@ if your API need only 'GET' method, then in your vimrc::
     " API_PARSER_FUNC is the name of the function to parse the response content
     " And you can add 'headers' key for specified headers dict
     let g:trans_api.YOUR_API = {
+        \'type': 'get',
         \'url': YOUR_API_URL,
         \'params': YOUR_API_PARAMS,
         \'query_str': API_QUERY_STR,
-        \'parser': API_PARSER_FUNC
+        \'parser': API_PARSER_FUNC,
         \}
 
     fun! API_PARSER_FUNC(content)
         " parse content here.
+        return a:content 
     endfun
 
 
@@ -152,17 +155,17 @@ No oauth API added as that needs billing.
 :: 
 
     let g:trans_api.google = {
-                \'url': 'http://translate.google.com/translate_a/t',
-                \'params' : {
-                        \"client" : 'firefox-a',
-                        \"ie" : 'UTF-8',
-                        \"oe" : 'UTF-8',
-                        \},
-                \'query_str': 'langpair=%FROM%7C%TO&text=%TEXT',
-                \'parser': 'trans#data#parser_google',
-                \'type': 'get',
-                \'headers': { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.15 Safari/536.5' },
-                \}
+        \'url': 'http://translate.google.com/translate_a/t',
+        \'params' : {
+                \"client" : 'firefox-a',
+                \"ie" : 'UTF-8',
+                \"oe" : 'UTF-8',
+                \},
+        \'query_str': 'langpair=%FROM%7C%TO&text=%TEXT',
+        \'parser': 'trans#data#parser_google',
+        \'type': 'get',
+        \'headers': { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.15 Safari/536.5' },
+        \}
 
 Bing
 ~~~~
@@ -175,7 +178,7 @@ Get your key for oauth_obj:
 
 1. create the live account live_
 2. get the client_id (customer ID) at datamarket_ 
-3. get the client_secret at developer_
+3. get the client_secret at developer_ (create a app with client_id)
 4. Active microsoft translator API at translator_data_
 
 ::
